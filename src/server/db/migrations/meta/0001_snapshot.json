@@ -1,11 +1,11 @@
 {
-  "id": "d277951c-bbeb-4494-9120-bd55d9e638ba",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "87313cff-7207-48ac-8044-90c20b153ecb",
+  "prevId": "d277951c-bbeb-4494-9120-bd55d9e638ba",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.products": {
-      "name": "products",
+    "public.pillows": {
+      "name": "pillows",
       "schema": "",
       "columns": {
         "id": {

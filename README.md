@@ -2,12 +2,14 @@
 
 # TO-DO
 
--   [] put the project on vercel and github
+-   [x] put the project on vercel and github
 -   [x] adjust and create datbase with drizzle
--   [] add the basic ui
--   [] add dynamic routing for products
--   [] add zustand
--   [] add cart and checkout page
--   [] install mpesa integration to project
--   [] install clerk to site
+-   [x] add the basic ui
+-   [x] add dynamic routing for products
+-   [x] add zustand
+-   [x] add cart and checkout page
+-   [x] install mpesa integration to project
+-   [x] install clerk to site
+-   [] configure database
 -   [] add the dashboard
+-   [] configurre middleware
