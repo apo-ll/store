@@ -1,8 +1,6 @@
 // /api/MpesaPayment/route.ts
 
-import { NextRequest } from "next/server";
-
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
     try {
         const tokener = await fetch(
             "http://localhost:3000/api/Mpesa/MpesaToken",

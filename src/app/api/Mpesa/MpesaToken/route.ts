@@ -1,6 +1,4 @@
-import { NextResponse } from "next/server";
-
-export async function GET(res: NextResponse) {
+export async function GET() {
     try {
         const response = await fetch(
             "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",

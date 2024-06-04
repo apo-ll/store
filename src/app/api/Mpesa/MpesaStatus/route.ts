@@ -1,8 +1,6 @@
 // /api/MpesaStatus/route.ts
 
-import { NextRequest, NextResponse } from "next/server";
-
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: Request) {
     try {
         const requestBody = await req.json();
         const checkoutRequestId = requestBody.CheckoutRequestID;
