@@ -1,4 +1,18 @@
 // /api/MpesaStatus/route.ts
+async function queryTransactionStatus(token: any, bodys: any) {
+    const res = await fetch(
+        "https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(bodys),
+        }
+    );
+    return res.json();
+}
 
 export async function POST(req: Request) {
     try {
@@ -39,21 +53,6 @@ export async function POST(req: Request) {
             Timestamp: time,
             CheckoutRequestID: checkoutRequestId,
         };
-
-        async function queryTransactionStatus(token: any, bodys: any) {
-            const res = await fetch(
-                "https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(bodys),
-                }
-            );
-            return res.json();
-        }
 
         let data = await queryTransactionStatus(token, bodys);
 
