@@ -1,12 +1,20 @@
 import Link from "next/link";
 import ProductItem from "@/components/ProductCard";
+import { auth } from "@clerk/nextjs/server";
+import { db } from "@/server/db";
+import { eq } from "drizzle-orm";
+import { User } from "@/server/db/schema";
+import { clerkClient } from "@clerk/nextjs/server";
 
-const Home = () => {
+import { migrate } from "drizzle-orm/neon-http/migrator";
+
+const Home = async () => {
     return (
         <main className="flex flex-col lg:gap-20 gap-10 p-4 max-w-[1200px] w-full lg:py-20 py-10 mx-auto items-start justify-center">
             <div className="flex flex-col gap-4 w-full justify-between">
                 <div className="flex flex-row justify-between">
                     <h1 className="text-xl font-semibold">Shoes</h1>
+
                     <Link href="/" className="flex flex-row gap-1 items-center">
                         <h1>Show More</h1>{" "}
                         <svg
@@ -45,3 +53,40 @@ const Home = () => {
 };
 
 export default Home;
+
+async function handleUser() {
+    try {
+        const { userId } = auth();
+
+        if (!userId) {
+            throw new Error("User ID not found.");
+        }
+
+        const user = await clerkClient.users.getUser(userId);
+
+        // Check if the user exists
+        const existingUser = await db
+            .select()
+            .from(User)
+            .where(eq(User.userNo, userId));
+
+        if (!existingUser[0]) {
+            // Create a new user record
+            await db
+                .insert(User)
+                .values({
+                    name: `${user.firstName} ${user.lastName}`,
+                    email: user.emailAddresses[0].emailAddress,
+                    phone: user.phoneNumbers[0]?.phoneNumber,
+                    userNo: userId,
+                })
+                .returning({ id: User.id })
+                .onConflictDoNothing();
+        } //else { Optionally, update existing customer record if needed }
+    } catch (error) {
+        console.error("Error handling user:", error); // Log the error for debugging
+        // Handle the error appropriately (e.g., display an error message to the user)
+    }
+}
+
+handleUser();

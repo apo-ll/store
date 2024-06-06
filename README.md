@@ -10,6 +10,7 @@
 -   [x] add cart and checkout page
 -   [x] install mpesa integration to project
 -   [x] install clerk to site
--   [] configure database
--   [] add the dashboard
+-   [x] configure database
+-   [x] add the dashboard
 -   [] configurre middleware
+-   [] add the order page

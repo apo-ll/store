@@ -70,6 +70,16 @@ export function MainNav() {
                             href={"/"}>
                             Shoes
                         </Link>
+                        <Link
+                            className=" font-medium hover:transition-all hover:duration-300 font text-black/60 hover:text-black "
+                            href={"/orders"}>
+                            Orders
+                        </Link>
+                        <Link
+                            className=" font-medium hover:transition-all hover:duration-300 font text-black/60 hover:text-black "
+                            href={"/dashboard"}>
+                            Dashboard
+                        </Link>
                     </div>
                 </div>
                 <div className="flex flex-row items-center  gap-3">
