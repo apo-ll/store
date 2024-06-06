@@ -1,4 +1,8 @@
 "use server";
+import { db } from "@/server/db";
+import { Orders } from "@/server/db/schema";
+import { clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 export async function MpesaPayment(prevState: any, formData: any) {
     const numberString = formData.get("number");
@@ -52,31 +56,37 @@ export async function MpesaPayment(prevState: any, formData: any) {
     console.log(res);
 
     if (
-        res.mpesaStatus.ResponseDescription ===
-        "The service request has been accepted successsfully"
+        res.mpesaStatus.ResultDesc ===
+        "The service request is processed successfully."
+    ) {
+        const { userId } = auth();
+        const user = await clerkClient.users.getUser(userId as string);
+
+        await db
+            .insert(Orders)
+            .values({
+                total: "1",
+                customerName: `${user.firstName} ${user.lastName}`,
+                status: "pending",
+            })
+            .returning({ id: Orders.id })
+            .onConflictDoNothing();
+    }
+
+    if (res.mpesaStatus.ResultDesc === "Request cancelled by user") {
+        return {
+            message: "You cancelled the request",
+        };
+    } else if (
+        res.mpesaStatus.ResultDesc ===
+        "The service request is processed successfully."
     ) {
         return {
             message: "The payment was successful",
         };
-    } else if (res.mpesaStatus.ResponseCode === "0") {
-        return {
-            message: "The payment was unsuccessful",
-        };
-    } else if (res.mpesaStatus.ResponseCode === "3") {
-        return {
-            message: "The transaction was not found",
-        };
-    } else if (res.mpesaStatus.ResponseCode === "4") {
-        return {
-            message: "Invalid transaction",
-        };
-    } else if (res.mpesaStatus.ResponseCode === "5") {
-        return {
-            message: "The transaction was not found",
-        };
     } else {
         return {
-            message: "Unexpected response code",
+            message: "Try Again",
         };
     }
 }

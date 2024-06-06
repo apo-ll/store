@@ -31,8 +31,6 @@ export async function POST(req: Request) {
         );
         const data = await mpesaResponse.json();
 
-        console.log(data);
-
         const mpesaStatus = await fetch(
             "http://localhost:3000/api/Mpesa/MpesaStatus",
             {
